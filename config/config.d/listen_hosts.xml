@@ -1,0 +1,7 @@
+<yandex>
+    <!-- Allow ClickHouse to listen on all interfaces so host connections work. -->
+    <listen_host remove="true">::1</listen_host>
+    <listen_host remove="true">127.0.0.1</listen_host>
+    <listen_host>0.0.0.0</listen_host>
+</yandex>
+

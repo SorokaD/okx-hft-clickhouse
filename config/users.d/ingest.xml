@@ -1,0 +1,16 @@
+<yandex>
+    <users>
+        <ingest>
+            <password>ingest_password</password>
+            <networks>
+                <ip>::/0</ip>
+            </networks>
+            <profile>limited</profile>
+            <quota>default</quota>
+            <grants>
+                <grant>GRANT CREATE TABLE ON okx_raw.*</grant>
+                <grant>GRANT INSERT ON okx_raw.*</grant>
+            </grants>
+        </ingest>
+    </users>
+</yandex>

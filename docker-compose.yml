@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:25.9.3.48       # лучше пиновать, а не latest
+    container_name: clickhouse
+    ports:
+      - "8123:8123"                                      # HTTP
+      - "9003:9000"                                      # Native (хост:контейнер) — оставил как у тебя
+    volumes:
+      - ./config/config.d:/etc/clickhouse-server/config.d:ro
+      - ./config/users.d:/etc/clickhouse-server/users.d
+      - clickhouse_data:/var/lib/clickhouse
+      # - /mnt/d/clickhouse:/var/lib/clickhouse          # если хочешь хостовый путь
+    environment:
+      - TZ=UTC
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    tmpfs:
+      - /var/lib/clickhouse/tmp:size=1g
+    networks:
+      - hft_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--host", "localhost", "--query", "SELECT 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  clickhouse-exporter:
+    image: f1yegor/clickhouse-exporter:latest            # можно заменить на percona/clickhouse_exporter
+    container_name: clickhouse-exporter
+    ports:
+      - "9116:9116"
+    environment:
+      - CLICKHOUSE_HOST=clickhouse
+      - CLICKHOUSE_PORT=8123
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=
+    networks:
+      - hft_network
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  clickhouse_data:
+
+networks:
+  hft_network:
+    driver: bridge

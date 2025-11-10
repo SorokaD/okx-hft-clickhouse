@@ -1,0 +1,9 @@
+<clickhouse>
+    <macros>
+        <cluster>okx_local</cluster>
+        <shard>01</shard>
+        <replica>01</replica>
+        <environment>dev</environment>
+    </macros>
+</clickhouse>
+

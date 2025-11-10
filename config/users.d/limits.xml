@@ -1,0 +1,11 @@
+<yandex>
+    <profiles>
+        <limited>
+            <max_memory_usage>8589934592</max_memory_usage>
+            <max_threads>8</max_threads>
+            <max_concurrent_queries_for_user>4</max_concurrent_queries_for_user>
+            <load_balancing>random</load_balancing>
+        </limited>
+    </profiles>
+</yandex>
+

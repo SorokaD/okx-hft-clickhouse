@@ -1,0 +1,22 @@
+<clickhouse>
+    <!-- Retain system logs for a limited period to keep the volumes tidy.
+         Adjust lifetimes and intervals to match your retention policy. -->
+    <system_log>
+        <query_log>
+            <flush_interval_milliseconds>7500</flush_interval_milliseconds>
+            <lifetime>7d</lifetime>
+        </query_log>
+        <query_thread_log>
+            <lifetime>3d</lifetime>
+        </query_thread_log>
+        <trace_log>
+            <lifetime>3d</lifetime>
+        </trace_log>
+        <metric_log>
+            <lifetime>7d</lifetime>
+        </metric_log>
+        <asynchronous_metric_log>
+            <lifetime>7d</lifetime>
+        </asynchronous_metric_log>
+    </system_log>
+</clickhouse>

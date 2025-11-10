@@ -1,0 +1,16 @@
+<clickhouse>
+    <users>
+        <bi_ro>
+            <password>bi_ro_password</password>
+            <networks>
+                <ip>::/0</ip>
+            </networks>
+            <profile>readonly</profile>
+            <quota>default</quota>
+            <allow_databases>
+                <database>okx_core</database>
+                <database>okx_feat</database>
+            </allow_databases>
+        </bi_ro>
+    </users>
+</clickhouse>
