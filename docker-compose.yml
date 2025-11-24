@@ -13,8 +13,11 @@ services:
       TZ: ${TZ:-UTC}
     ports:
       - "5432:5432"                # << внешний порт 5432, внутри 5432
+    # volumes:
+    #   - D:/timescaledb:/var/lib/postgresql/data #:TODO: change to relative path
+    #   - ./initdb:/docker-entrypoint-initdb.d:ro
     volumes:
-      - D:/timescaledb:/var/lib/postgresql/data #:TODO: change to relative path
+      - ./pg_data:/var/lib/postgresql/data
       - ./initdb:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-postgres}"]
@@ -29,3 +32,9 @@ services:
 networks:
   hft_network:
     driver: bridge
+    name: hft_network
+
+# networks:
+#   hft_network:
+#     external: true
+#     name: hft_network
