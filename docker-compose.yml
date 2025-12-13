@@ -29,6 +29,45 @@ services:
     networks:
       - hft_network
 
+  # ==================== Postgres Exporter (для Prometheus) ====================
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0
+    container_name: postgres-exporter-timescale
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATA_SOURCE_URI: "timescaledb:5432/${POSTGRES_DB:-postgres}?sslmode=disable"
+      DATA_SOURCE_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      DATA_SOURCE_PASS: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports:
+      - "9187:9187"  # Prometheus scrape port
+    networks:
+      - hft_network
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+
+  # ==================== Node Exporter (Host Metrics) ====================
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    container_name: node-exporter-timescale
+    restart: unless-stopped
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--path.rootfs=/rootfs"
+      - "--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    pid: host
+    ports:
+      - "9100:9100"  # Prometheus scrape port
+    networks:
+      - hft_network
+
 networks:
   hft_network:
     driver: bridge
