@@ -97,3 +97,6 @@ models/*
 
 # My ignore 
 postgreSQL/*
+# Local postgres data
+pg_data/
+
