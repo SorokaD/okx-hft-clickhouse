@@ -3,7 +3,7 @@ version: "3.9"
 services:
   timescaledb:
     build: .
-    image: timescaledb_pg16_with_pgcron
+    image: timescale/timescaledb:2.23.0-pg16
     shm_size: 2g
     container_name: timescaledb_pg16
     env_file:
@@ -13,10 +13,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       POSTGRES_DB: ${POSTGRES_DB:-postgres}
       TZ: ${TZ:-UTC}
-    command: >
-      postgres
-      -c shared_preload_libraries=timescaledb,pg_cron
-      -c cron.database_name=${POSTGRES_DB:-postgres}
     ports:
       - "5432:5432"                # << внешний порт 5432, внутри 5432
     # volumes:
